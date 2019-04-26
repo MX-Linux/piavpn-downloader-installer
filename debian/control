@@ -1,11 +1,9 @@
-Source: piavpn-downloader-installer
+Package: piavpn-downloader-installer
+Version: 19.04.01
+Architecture: all
+Maintainer: dolphinoracle <dolphinoracle@gmail.com>
+Installed-Size: 60
+Depends: net-tools
 Section: system
 Priority: optional
-Maintainer: dolphinoracle <dolphinoracle@gmail.com>
-Build-Depends: debhelper (>=9)
-Standards-Version: 3.9.8
-
-Package: piavpn-downloader-installer
-Architecture: all
-Depends:
 Description: installer script for piavpn daemon by Private Internet Access

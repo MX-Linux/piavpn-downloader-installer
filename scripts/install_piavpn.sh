@@ -30,16 +30,12 @@ sha256sum -c /tmp/pia-linux.run.sha256 || { echo "Checksum-ERROR"; exit 1; }
 SYSTEMCTL_EXIST="true"
 command -v systemctl >/dev/null || { ln -s /bin/true /bin/systemctl;  SYSTEMCTL_EXIST="false"; }
 
-
 # run installer as user
 chmod 755 /tmp/pia-linux.run
-PRESS_ANY_KEY="Press any key to close"
-#x-terminal-emulator -e bash -c "sudo -u $(logname) /tmp/pia-linux.run; echo; read -n 1 -s -r -p '$PRESS_ANY_KEY'" 2>/dev/null 1>/dev/null
-bash -c "sudo -u $(logname) /tmp/pia-linux.run; echo" 
-
+bash -c "sudo -u $(logname) /tmp/pia-linux.run --accept --nox11 2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'; echo" 
 
 # tidy up
 [ "$SYSTEMCTL_EXIST" = "false" ] &&  rm /bin/systemctl
-#rm /tmp/pia-linux.run        2>/dev/null
-#rm /tmp/pia-linux.run.sha256 2>/dev/null
+rm /tmp/pia-linux.run        2>/dev/null
+rm /tmp/pia-linux.run.sha256 2>/dev/null
 echo "DONE!"
