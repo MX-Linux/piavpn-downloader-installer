@@ -32,7 +32,16 @@ command -v systemctl >/dev/null || { ln -s /bin/true /bin/systemctl;  SYSTEMCTL_
 
 # run installer as user
 chmod 755 /tmp/pia-linux.run
-bash -c "sudo -u $(logname) /tmp/pia-linux.run --accept --nox11 2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'; echo" 
+
+#bash -c "sudo -u $(logname) /tmp/pia-linux.run --accept --nox11 2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'; echo" 
+# 
+#su - $(logname) -s/bin/bash -c "env XAUTHORITY=/home/$(logname)/.Xauthority gksudo -D '/tmp/$FLN' /bin/true || exit 1; /tmp/pia-linux.run --accept --nox11  2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'; echo "
+
+su - $(logname) -c /bin/bash <<BASH
+	env XAUTHORITY=/home/$(logname)/.Xauthority gksudo -D '/tmp/$FLN' /bin/true || exit 1
+	/tmp/pia-linux.run --accept --nox11  2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'
+	echo
+BASH
 
 # tidy up
 [ "$SYSTEMCTL_EXIST" = "false" ] &&  rm /bin/systemctl

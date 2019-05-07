@@ -12,7 +12,11 @@ fi
 # run piavpn uninstaller as user
 UNINSTALL=/opt/piavpn/bin/pia-uninstall.sh
 if [ -x $UNINSTALL ]; then
-  bash -c "echo Y | sudo -u $(logname) $UNINSTALL  2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'; echo" 
+	su - $(logname) -c /bin/bash <<BASH
+	env XAUTHORITY=/home/$(logname)/.Xauthority gksudo -D '$UNINSTALL' /bin/true || exit 1
+	echo Y | $UNINSTALL  2>&1 | perl -pe 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r/\n/g'
+	echo
+BASH
 fi
 
 # tidy up
