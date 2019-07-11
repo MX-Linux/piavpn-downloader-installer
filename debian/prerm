@@ -19,25 +19,22 @@ set -e
 
 
 case "$1" in
-        purge)
+  purge|remove)
+    # run uninstaller as user
+    UNINSTALL=/usr/share/pia-downloader-installer/uninstall_piavpn.sh
+    if [ -x $UNINSTALL ]; then $UNINSTALL; fi
+    ;;
 
-        ;;
+  upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    # do nothing
+    ;;
 
-	remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-		# do nothing
-	;;
-	
-	*)
-		echo "postrm called with unknown argument \`$1'" >&2
-		exit 1
-	;;
+  *)
+    echo "postrm called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
 esac
 
-# run uninstaller as user
-UNINSTALL=/usr/share/pia-downloader-installer/uninstall_piavpn.sh
-if [ -x $UNINSTALL ]; then
-   /usr/share/pia-downloader-installer/uninstall_piavpn.sh
-fi
 
 
 exit 0
