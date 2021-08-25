@@ -1,3 +1,9 @@
+piavpn-downloader-installer (21.08.01) mx; urgency=medium
+
+  * updated installer URL
+
+ -- fehlix <fehlix@mxlinux.org>  Wed, 25 Aug 2021 20:37:58 +0000
+
 piavpn-downloader-installer (19.07.01) mx; urgency=medium
 
   * updated installer scripts for buster

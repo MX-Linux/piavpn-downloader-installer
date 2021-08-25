@@ -15,18 +15,17 @@ case $(sudo -H readlink /proc/1/exe) in
     ;;
 esac
 
-
-FLN=$(curl -s https://www.privateinternetaccess.com/pages/download \
-    | grep -A3 -E 'filename.*pia-linux[0-9.-]+[.]run' \
-    | grep -m1 -Eo 'pia-linux[0-9.-]+[.]run')
+VPN=https://www.privateinternetaccess.com/download/linux-vpn
+DLD=https://installers.privateinternetaccess.com/download
+URL=$(curl -s $VPN | grep -m1 -oE "$DLD/pia-linux[0-9.-]+.run")
+FLN=${URL##*/}
 
 # get piavpn
 echo "Downloading Private Internet Access for Linux 64bit : $FLN"
 
 rm /tmp/pia-linux.run 2>/dev/null
 
-sudo -H -u $(logname) curl -RL  -o /tmp/pia-linux.run \
-      https://installers.privateinternetaccess.com/download/${FLN} 
+sudo -H -u $(logname) curl -RL  -o /tmp/pia-linux.run $URL
 
 if [ -f /tmp/pia-linux.run ]; then
   echo "[ OK ] downloaded '$FLN'"
@@ -35,6 +34,7 @@ else
   exit 1
 fi
 
+:<<NOTUSED
 # get checksum
 CHK="$(curl -s https://www.privateinternetaccess.com/pages/download \
      | grep -A10 -E 'filename.*pia-linux[0-9.-]+[.]run' \
@@ -58,6 +58,7 @@ else
    echo "[ ERRROR ] Checksum verfication failed"
    exit 3
 fi
+NOTUSED
 
 chmod 755 /tmp/pia-linux.run
 rm /tmp/pia-linux.run.log    2>/dev/null
